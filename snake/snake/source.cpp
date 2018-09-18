@@ -1,85 +1,42 @@
-#include <iostream>
-#include <iomanip>
-#include <Windows.h>
-#include <conio.h>
-#include <string>
+#include "snake.h"
 using namespace std;
 
-const int MAX(25);
-enum { KB = 224, UP = 72, DOWN = 80, LEFT = 75, RIGHT = 77 };
-
-void gotoxy(COORD pox)
-{
-	COORD pos = { (pox.X + 1) * 2 , pox.Y + 2 };
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-}
 
 int main()
 {
-	COORD pos = { 13,13 };
-	string stone[7]={"¡à","¡á","¡ã","¡å","¢¸","¢º","¡Ü"};
-	string board[MAX][MAX];
-	for (int i = 0; i < MAX; ++i)
-	{
-		for (int j = 0; j < MAX; ++j)
-		{
-			switch (i)
-			{
-			case 0:board[i][j] = stone[3]; break;
-			case (MAX - 1):board[i][j] = stone[2]; break;
-			default:
-				switch (j)
-				{
-				case 0:board[i][j] = stone[5]; break;
-				case (MAX - 1):board[i][j] = stone[4]; break;
-				default:board[i][j] = stone[0]; break;
-				}break;
-			}
-		}
-	}
-	cout.width(MAX);
+	snake s;
+	enum { EMP, FUL, ADD };
+	cout.width(BOARD_SIZE);
 	cout << "SNAKE" << endl;
-	for (int i = 0; i < MAX; ++i)
+	for (int col = 0; col < BOARD_SIZE; ++col)
 	{
-		for (int j = 0; j < MAX; ++j)
-		{
-			cout << board[i][j];
-		}
-		cout << '\n';
+		cout << "¡å";
 	}
 	cout << "\n";
-	COORD bef;
-	while (1)
+	for (int row = 0; row < BOARD_SIZE-2; ++row)
 	{
-		bef = pos;
-		int nSelect = 0;
-		if (_kbhit) {
-			nSelect = _getch();
-			if (nSelect == KB) {
-				nSelect = _getch();
-				switch (nSelect)
-				{
-				case UP:
-					pos.Y--;
-					break;
-				case DOWN:
-					pos.Y++;
-					break;
-				case LEFT:
-					pos.X--;
-					break;
-				case RIGHT:
-					pos.X++;
-					break;
-				default:
-					break;
-				}
+		for (int col = 0; col < BOARD_SIZE; ++col)
+		{
+			switch (col)
+			{
+			case 0: cout << "¢º"; break;
+			case BOARD_SIZE-1:cout << "¢¸"; break;
+			default:cout << "¡à"; break;
 			}
 		}
-		gotoxy(bef);
-		cout << stone[0];
-		gotoxy(pos);
-		cout << stone[1];
+		cout << "\n";
 	}
+	for (int col = 0; col < BOARD_SIZE; ++col)
+	{
+		cout << "¡ã";
+	}
+	cout << "\n";
+
+	while (int check = 1)
+	{
+		check = s.move();
+	}
+	std::cout << "finished!" << endl;
+	getchar();
 	return 0;
 }
